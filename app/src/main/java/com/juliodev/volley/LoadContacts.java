@@ -29,6 +29,8 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
     private static final String KEY_IMAGE = "profile_pic";
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private ArrayList<Contact> contacts;
+
 
     private Activity activity;
     private ProgressDialog progress;
@@ -47,7 +49,7 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
         progress.show();
     }
 
-    ArrayList<Contact> contacts;
+
 
     @Override
     protected ArrayList<Contact> doInBackground(String... strings) {
@@ -69,12 +71,17 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
                         contact.setGender(json.getString(KEY_GENDER));
                         contact.setImage(json.getString(KEY_IMAGE));
                         contact.setEmail(json.getString(KEY_EMAIL));
-
                         contacts.add(contact);
+
+
                     }
+                    ContactAdapter adapter = new ContactAdapter(activity, contacts);
+                    ListView ListContacts = activity.findViewById(R.id.listViewContacts);
+                    ListContacts.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -82,11 +89,14 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
                 VolleyLog.d(TAG, "Error en peticion", error.getMessage());
             }
         });
+        // desactivamos la cache
+        getContacts.setShouldCache(false);
         // creamos cola de peticiones de volley
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         // agregamos la peticion que saca la informacion de los contactos
         // a la cola antes mencionada
         requestQueue.add(getContacts);
+
 
         // regresamos los contactos
         return contacts;
@@ -94,9 +104,7 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
 
     @Override
     protected void onPostExecute(ArrayList<Contact> contacts) {
-        ListView ListContacts = this.activity.findViewById(R.id.listViewContacts);
-        ContactAdapter adapter = new ContactAdapter(this.activity, contacts);
-        ListContacts.setAdapter(adapter);
+
         progress.dismiss();
     }
 }
