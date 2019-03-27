@@ -73,10 +73,6 @@ public class Contact {
         this.image = image;
     }
 
-    public ArrayList<Contact> getAllContacts() {
-        return allContacts;
-    }
-
     public void setAllContacts(ArrayList<Contact> allContacts) {
         this.allContacts = allContacts;
     }

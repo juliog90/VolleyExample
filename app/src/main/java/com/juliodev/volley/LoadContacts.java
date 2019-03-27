@@ -2,10 +2,7 @@ package com.juliodev.volley;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -14,22 +11,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
 
@@ -45,14 +36,13 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
         this.activity = activity;
     }
 
-
     @Override
     protected void onPreExecute() {
         progress = new ProgressDialog(this.activity);
         progress.setMessage("Loading...");
         progress.setIndeterminate(false);
         progress.setCancelable(false);
-//        progress.show();
+        progress.show();
     }
 
     ArrayList<Contact> contacts;
@@ -60,14 +50,19 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
     @Override
     protected ArrayList<Contact> doInBackground(String... strings) {
 
+        contacts = new ArrayList<>();
+
         // Peticion de tipo json usando volley
         JsonObjectRequest getContacts = new JsonObjectRequest(Request.Method.GET, API_URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    // convertimos el arreglo de json en una lista
                     String jsonArray = response.getJSONArray(KEY_CONTACTS).toString();
+
                     Type listType = new TypeToken<ArrayList<Contact>>() {
                     }.getType();
+
                     contacts = new Gson().fromJson(jsonArray, listType);
 
                 } catch (JSONException e) {
