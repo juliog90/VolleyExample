@@ -2,10 +2,7 @@ package com.juliodev.volley;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -20,10 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
