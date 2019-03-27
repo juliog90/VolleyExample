@@ -34,6 +34,7 @@ import java.util.List;
 public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
 
     private static final String API_URL = "http://pratikbutani.x10.mx/json_data.json";
+    private static final String KEY_CONTACTS = "contacts";
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -51,7 +52,7 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
         progress.setMessage("Loading...");
         progress.setIndeterminate(false);
         progress.setCancelable(false);
-        progress.show();
+//        progress.show();
     }
 
     ArrayList<Contact> contacts;
@@ -59,11 +60,26 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
     @Override
     protected ArrayList<Contact> doInBackground(String... strings) {
 
-        // lista de contactos vacia
-        AllContacts contacts = new AllContacts()(
-
         // Peticion de tipo json usando volley
-        JsonObjectRequest getContacts = new JsonObjectRequest(JsonObjectRequest.Method.GET, API_URL, new JsonObjectRequest)
+        JsonObjectRequest getContacts = new JsonObjectRequest(Request.Method.GET, API_URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String jsonArray = response.getJSONArray(KEY_CONTACTS).toString();
+                    Type listType = new TypeToken<ArrayList<Contact>>() {
+                    }.getType();
+                    contacts = new Gson().fromJson(jsonArray, listType);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error en peticion", error.getMessage());
+            }
+        });
         // creamos cola de peticiones de volley
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         // agregamos la peticion que saca la informacion de los contactos
