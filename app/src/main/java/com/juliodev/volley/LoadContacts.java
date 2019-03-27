@@ -65,6 +65,10 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
 
                     contacts = new Gson().fromJson(jsonArray, listType);
 
+                    ListView ListContacts = activity.findViewById(R.id.listViewContacts);
+                    ContactAdapter adapter = new ContactAdapter(activity, contacts);
+                    ListContacts.setAdapter(adapter);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -87,9 +91,7 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
 
     @Override
     protected void onPostExecute(ArrayList<Contact> contacts) {
-        ListView ListContacts = this.activity.findViewById(R.id.listViewContacts);
-        ContactAdapter adapter = new ContactAdapter(this.activity, contacts);
-        ListContacts.setAdapter(adapter);
+
         progress.dismiss();
     }
 }
