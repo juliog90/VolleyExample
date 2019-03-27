@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -52,14 +54,12 @@ public class ContactAdapter extends BaseAdapter {
         TextView txtName = view.findViewById(R.id.txtNombre);
         TextView txtEmail = view.findViewById(R.id.txtEmail);
         TextView txtGenero = view.findViewById(R.id.txtGenero);
-        // un tipo de view que usa volley que carga imagenes desde un url
-        NetworkImageView image = view.findViewById(R.id.imgImagen);
+        // la magia de picasso
+        ImageView image = view.findViewById(R.id.imgImagen);
 
         Contact c = this.arrayList.get(position);
 
-        loader = VolleyImageLoader.getInstance(context)
-                .getImageLoader();
-        image.setImageUrl(c.getImage(), loader);
+        Picasso.get().load(c.getImage()).into(image);
         txtGenero.setText(c.getGender());
         txtEmail.setText(c.getEmail());
         txtName.setText(c.getName());

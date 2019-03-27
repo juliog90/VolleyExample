@@ -6,7 +6,7 @@
     android:paddingLeft="20sp"
     android:paddingRight="20sp">
 
-    <com.android.volley.toolbox.NetworkImageView
+    <ImageView
         android:id="@+id/imgImagen"
         android:layout_width="150sp"
         android:layout_height="150sp" />

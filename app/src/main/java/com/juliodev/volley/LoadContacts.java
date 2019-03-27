@@ -14,7 +14,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,18 +25,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
 
     private static final String API_URL = "http://pratikbutani.x10.mx/json_data.json";
-    private static final String KEY_CONTACTS = "contacts";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_GENDER = "gender";
-    private static final String KEY_IMAGE = "profile_pic";
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -60,35 +60,10 @@ public class LoadContacts extends AsyncTask<String, Void, ArrayList<Contact>> {
     protected ArrayList<Contact> doInBackground(String... strings) {
 
         // lista de contactos vacia
-        contacts = new ArrayList<>();
+        AllContacts contacts = new AllContacts()(
 
         // Peticion de tipo json usando volley
-        JsonObjectRequest getContacts = new JsonObjectRequest(Request.Method.GET, API_URL, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray jsonArray = response.getJSONArray(KEY_CONTACTS);
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject json = jsonArray.getJSONObject(i);
-                        Contact contact = new Contact();
-                        contact.setName(json.getString(KEY_NAME));
-                        contact.setGender(json.getString(KEY_GENDER));
-                        contact.setImage(json.getString(KEY_IMAGE));
-                        contact.setEmail(json.getString(KEY_EMAIL));
-
-                        contacts.add(contact);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error en peticion", error.getMessage());
-            }
-        });
+        JsonObjectRequest getContacts = new JsonObjectRequest(JsonObjectRequest.Method.GET, API_URL, new JsonObjectRequest)
         // creamos cola de peticiones de volley
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
         // agregamos la peticion que saca la informacion de los contactos
